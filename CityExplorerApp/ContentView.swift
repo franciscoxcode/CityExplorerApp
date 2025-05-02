@@ -25,11 +25,43 @@ struct ContentView: View {
     }
 }
 
+struct Country: Identifiable {
+    let id = UUID()
+    let name: String
+    let url: String
+}
+
 struct ExploreView: View {
-    var body: some View {
+    
+    let countries = [
+        Country(name: "Italy", url: "iOS Developer"),
+        Country(name: "United States", url: "UX Designer"),
+        Country(name: "France", url: ""),
+        Country(name: "Spain", url: ""),
+        Country(name: "Germany", url: ""),
+        Country(name: "Mexico", url: "")
+    ]
+    
+
+    let columns = [
+        GridItem(.flexible()),  
+        GridItem(.flexible())
+    ]
+    
+    var body: some View {       
         NavigationView {
             VStack {
                 Text("Welcome to our app")
+                Spacer()
+                LazyVGrid(columns: columns) {
+                    ForEach(countries) { country in
+                        VStack {
+                            Image(country.url)
+                            Text(country.name)
+                                .font(.custom("Roboto", size: 20))
+                        }
+                    }
+                }
             }
             .navigationTitle("World Cities")
             .navigationBarTitleDisplayMode(.inline)
