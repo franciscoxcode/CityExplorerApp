@@ -29,17 +29,18 @@ struct Country: Identifiable {
     let id = UUID()
     let name: String
     let url: String
+    let description: String
 }
 
 struct ExploreView: View {
     
     let countries = [
-        Country(name: "Italy", url: "italy"),
-        Country(name: "United States", url: "usa"),
-        Country(name: "France", url: "france"),
-        Country(name: "Spain", url: "spain"),
-        Country(name: "Germany", url: "germany"),
-        Country(name: "Mexico", url: "mexico")
+        Country(name: "Italy", url: "italy", description: "Lorem ipsum dolor sit amet"),
+        Country(name: "United States", url: "usa", description: "Lorem ipsum dolor sit amet"),
+        Country(name: "France", url: "france", description: "Lorem ipsum dolor sit amet"),
+        Country(name: "Spain", url: "spain", description: "Lorem ipsum dolor sit amet"),
+        Country(name: "Germany", url: "germany", description: "Lorem ipsum dolor sit amet"),
+        Country(name: "Mexico", url: "mexico", description: "Lorem ipsum dolor sit amet")
     ]
     
 
@@ -56,12 +57,14 @@ struct ExploreView: View {
                 Spacer()
                 LazyVGrid(columns: columns) {
                     ForEach(countries) { country in
-                        VStack {
+                        NavigationLink (destination: CountryDetailView(country: country)) {
+                            VStack {
                             Image(country.url)
-                                .resizable()
-                                .scaledToFit()
-                            Text(country.name)
-                                .font(.custom("Roboto", size: 20))
+                                    .resizable()
+                                    .scaledToFit()
+                                Text(country.name)
+                                    .font(.custom("Roboto", size: 20))
+                            }
                         }
                         
                     }
@@ -81,6 +84,27 @@ struct ExploreView: View {
                 }
             }
         }
+    }
+}
+
+struct CountryDetailView: View {
+    let country: Country
+    
+    var body: some View {
+        VStack() {
+            Image(country.url)
+                .resizable()
+                .scaledToFit()
+                .frame(height: 200)
+            
+            Text (country.name)
+                .font(.title)
+            
+            Text(country.description)
+                .padding()
+        }
+        .navigationTitle(country.name)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
