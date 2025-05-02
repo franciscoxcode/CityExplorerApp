@@ -9,13 +9,46 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView {
+            ExploreView()
+                .tabItem {
+                    Image(systemName: "globe")
+                    Text("Explore")
+                }
+
+            FavoritesView()
+                .tabItem {
+                    Image(systemName: "heart")
+                    Text("Favorites")
+                }
         }
-        .padding()
+    }
+}
+
+struct ExploreView: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("Welcome to our app")
+            }
+            .navigationTitle("World Cities")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        print("Gear pressed")
+                    }) {
+                        Image(systemName: "gear")
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct FavoritesView: View {
+    var body: some View {
+        Text("Favorites")
     }
 }
 
