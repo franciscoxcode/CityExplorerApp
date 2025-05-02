@@ -34,12 +34,12 @@ struct Country: Identifiable {
 struct ExploreView: View {
     
     let countries = [
-        Country(name: "Italy", url: "iOS Developer"),
-        Country(name: "United States", url: "UX Designer"),
-        Country(name: "France", url: ""),
-        Country(name: "Spain", url: ""),
-        Country(name: "Germany", url: ""),
-        Country(name: "Mexico", url: "")
+        Country(name: "Italy", url: "italy"),
+        Country(name: "United States", url: "usa"),
+        Country(name: "France", url: "france"),
+        Country(name: "Spain", url: "spain"),
+        Country(name: "Germany", url: "germany"),
+        Country(name: "Mexico", url: "mexico")
     ]
     
 
@@ -52,17 +52,23 @@ struct ExploreView: View {
         NavigationView {
             VStack {
                 Text("Welcome to our app")
+                    .font(.title2)
                 Spacer()
                 LazyVGrid(columns: columns) {
                     ForEach(countries) { country in
                         VStack {
                             Image(country.url)
+                                .resizable()
+                                .scaledToFit()
                             Text(country.name)
                                 .font(.custom("Roboto", size: 20))
                         }
+                        
                     }
                 }
+                Spacer()
             }
+            .padding()
             .navigationTitle("World Cities")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
