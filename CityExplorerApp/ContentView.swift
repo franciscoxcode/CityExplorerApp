@@ -8,15 +8,25 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    
+        @State private var countries = [
+            Country(name: "Italy", url: "italy", description: "Lorem ipsum dolor sit amet", favorite: false),
+            Country(name: "United States", url: "usa", description: "Lorem ipsum dolor sit amet", favorite: false),
+            Country(name: "France", url: "france", description: "Lorem ipsum dolor sit amet", favorite: false),
+            Country(name: "Spain", url: "spain", description: "Lorem ipsum dolor sit amet", favorite: false),
+            Country(name: "Germany", url: "germany", description: "Lorem ipsum dolor sit amet", favorite: false),
+            Country(name: "Mexico", url: "mexico", description: "Lorem ipsum dolor sit amet", favorite: false)
+        ]
+    
     var body: some View {
         TabView {
-            ExploreView()
+            ExploreView(countries: $countries)
                 .tabItem {
                     Image(systemName: "globe")
                     Text("Explore")
                 }
-
-            FavoritesView()
+            FavoritesView(countries: $countries)
                 .tabItem {
                     Image(systemName: "heart")
                     Text("Favorites")
@@ -30,20 +40,11 @@ struct Country: Identifiable {
     let name: String
     let url: String
     let description: String
+    var favorite: Bool
 }
-
+    
 struct ExploreView: View {
-    
-    let countries = [
-        Country(name: "Italy", url: "italy", description: "Lorem ipsum dolor sit amet"),
-        Country(name: "United States", url: "usa", description: "Lorem ipsum dolor sit amet"),
-        Country(name: "France", url: "france", description: "Lorem ipsum dolor sit amet"),
-        Country(name: "Spain", url: "spain", description: "Lorem ipsum dolor sit amet"),
-        Country(name: "Germany", url: "germany", description: "Lorem ipsum dolor sit amet"),
-        Country(name: "Mexico", url: "mexico", description: "Lorem ipsum dolor sit amet")
-    ]
-    
-
+    @Binding var countries: [Country]
     let columns = [
         GridItem(.flexible()),  
         GridItem(.flexible())
@@ -56,10 +57,10 @@ struct ExploreView: View {
                     .font(.title2)
                 Spacer()
                 LazyVGrid(columns: columns) {
-                    ForEach(countries) { country in
-                        NavigationLink (destination: CountryDetailView(country: country)) {
+                    ForEach($countries) { $country in
+                        NavigationLink(destination: CountryDetailView(countries: $countries)) {
                             VStack {
-                            Image(country.url)
+                                Image(country.url)
                                     .resizable()
                                     .scaledToFit()
                                 Text(country.name)
@@ -88,7 +89,7 @@ struct ExploreView: View {
 }
 
 struct CountryDetailView: View {
-    let country: Country
+    @Binding var countries: [Country]
     
     var body: some View {
         VStack() {
@@ -102,6 +103,13 @@ struct CountryDetailView: View {
             
             Text(country.description)
                 .padding()
+            Button(action: {
+                country.favorite.toggle()
+            }) {
+                Image(systemName: country.favorite ? "heart.fill" : "heart")
+                    .foregroundStyle(country.favorite ? .red : .gray)
+                Text(country.favorite ? "Remove from favorites" : "Add to favorites")
+            }
         }
         .navigationTitle(country.name)
         .navigationBarTitleDisplayMode(.inline)
@@ -109,6 +117,12 @@ struct CountryDetailView: View {
 }
 
 struct FavoritesView: View {
+    @Binding var countries: [Country]
+    let columns = [
+        GridItem(.flexible()),  
+        GridItem(.flexible())
+    ]
+    
     var body: some View {
         Text("Favorites")
     }
